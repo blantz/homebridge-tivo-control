@@ -1,17 +1,13 @@
 {
   "pluginAlias": "homebridge-tivo-channels",
   "pluginType": "accessory",
-  "singular": false,
   "schema": {
-    "switches": {
-      "title": "Switches",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
+      "type": "object",
+      "properties": {
           "name": {
             "title": "Friendly Name",
             "type": "string"
+            "default": "Channel Switch"
           },
           "ip": {
             "title": "IP Address",
@@ -28,8 +24,6 @@
             "type": "boolean",
             "default": false
           }
-        }
-      }
     }
   }
 }
