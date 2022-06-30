@@ -1,0 +1,36 @@
+{
+  "pluginAlias": "PingHosts",
+  "pluginType": "platform",
+  "singular": false,
+  "schema": {
+    "switches": {
+      "title": "Switches",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Friendly Name",
+            "type": "string"
+          },
+          "ip": {
+            "title": "IP Address",
+            "type": "string"
+          },
+          "channel": {
+            "title": "Channel",
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+          },
+          "verbose": {
+            "title": "Verbose logging?",
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    }
+  }
+}
+
