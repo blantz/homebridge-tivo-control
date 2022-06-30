@@ -1,6 +1,6 @@
 {
-  "pluginAlias": "PingHosts",
-  "pluginType": "platform",
+  "pluginAlias": "homebridge-tivo-channels",
+  "pluginType": "accessory",
   "singular": false,
   "schema": {
     "switches": {
