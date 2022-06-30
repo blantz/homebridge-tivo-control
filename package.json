@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tivo-channels",
-  "version": "1.0.11-beta.0",
+  "version": "1.0.12-beta.0",
   "description": "Homebridge plugin for TiVo set top boxes, to provide switches that change channels.",
   "main": "index.js",
   "scripts": {
