@@ -14,7 +14,7 @@ var commands = [];
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory("homebridge-tivo-channels", "tivo", TiVoAccessory);
+    homebridge.registerAccessory("homebridge-tivo-bal", "Tivo Channels", TiVoAccessory);
 }
 
 function TiVoAccessory(log, config) {
@@ -33,8 +33,8 @@ function TiVoAccessory(log, config) {
 		channel = "" + config['channel'];
 	}
 
-	if (config['verbose'] != null) {
-		verbose = config['verbose'];
+	if (config['debug'] != null) {
+		verbose = config['debug'];
 	}
 	console.log("Verbose: " + verbose);
 	
@@ -54,6 +54,7 @@ function logIt (message) {
 		console.log(message);
 	}
 }
+
 function makeCommands (thisChannel) {
 	logIt("Using channel: " + thisChannel);
 	

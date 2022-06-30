@@ -1,30 +1,38 @@
 {
-  "pluginAlias": "homebridge-tivo-channels",
+  "pluginAlias": "Tivo Channels",
   "pluginType": "accessory",
   "schema": {
       "type": "object",
       "properties": {
           "name": {
             "title": "Friendly Name",
-            "type": "string"
+            "type": "string",
             "default": "Channel Switch"
           },
           "ip": {
             "title": "IP Address",
-            "type": "string"
+            "type": "string",
+            "default": "127.0.0.1",
+            "required": true
           },
           "channel": {
             "title": "Channel",
             "type": "integer",
             "default": 1,
-            "minimum": 1
+            "minimum": 1,
+            "required": true
           },
           "verbose": {
             "title": "Verbose logging?",
             "type": "boolean",
             "default": false
           }
-    }
-  }
+       }
+    },
+    "form": [
+    	"name",
+    	"ip",
+    	"channel",
+    	"verbose"
+    ]
 }
-
