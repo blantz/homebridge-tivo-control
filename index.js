@@ -14,7 +14,7 @@ var commands = [];
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
-    homebridge.registerAccessory("homebridge-tivo-bal", "Tivo Channels", TiVoAccessory);
+    homebridge.registerAccessory("homebridge-tivo-channels", "TivoChannels", TiVoAccessory);
 }
 
 function TiVoAccessory(log, config) {
@@ -36,7 +36,7 @@ function TiVoAccessory(log, config) {
 	if (config['debug'] != null) {
 		verbose = config['debug'];
 	}
-	console.log("Verbose: " + verbose);
+	log("Verbose: " + verbose);
 	
 	makeCommands(channel);
  
@@ -66,7 +66,6 @@ function makeCommands (thisChannel) {
 	logIt("CMD: " + JSON.stringify(commands));
 	
 	// define the required commands
-//	commands = ['SETCH 1008'];
 }
 
 TiVoAccessory.prototype.getServices = function() {
@@ -76,6 +75,7 @@ TiVoAccessory.prototype.getServices = function() {
         .setCharacteristic(Characteristic.Manufacturer, 'TiVo')
         .setCharacteristic(Characteristic.Model, '1.0.0')
         .setCharacteristic(Characteristic.SerialNumber, this.ip);
+        this.log("Registering services");
     return [this.service, informationService];
 };
 
@@ -88,9 +88,10 @@ TiVoAccessory.prototype._getOn = function(callback) {
 TiVoAccessory.prototype._setOn = function(on, callback) {
     var accessory = this;
     if (on) {
-	var theseCommands = commands.slice();
-	logIt("Using commands: "+ JSON.stringify(theseCommands));
-   	tivo.sendCommands(accessory.tivoConfig, theseCommands, function(responses) {
+		this.log("Changing to channel: " + channel);
+		var theseCommands = commands.slice();
+		logIt("Using commands: "+ JSON.stringify(theseCommands));
+   		tivo.sendCommands(accessory.tivoConfig, theseCommands, function(responses) {
 			logIt("Responses: " + JSON.stringify(responses));
         	callback();
         	logIt("Back from callback");
