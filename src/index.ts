@@ -1,11 +1,10 @@
-import { API } from 'homebridge';
-
-import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { TivoPlatform } from './tivo-platform';
+"use strict";
+const settings_1 = require("./settings");
+const platform_1 = require("./platform");
 
 /**
  * This method registers the platform with Homebridge
  */
-export = (api: API) => {
-    api.registerPlatform(PLUGIN_NAME, PLATFORM_NAME, TivoPlatform);
+module.exports = (api) => {
+    api.registerPlatform(settings_1.PLUGIN_NAME, settings_1.PLATFORM_NAME, platform_1.TivoPlatform);
 }
