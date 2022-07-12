@@ -1,33 +1,72 @@
 {
-  "pluginAlias": "TivoChannels",
+  "pluginAlias": "TivoControl",
   "pluginType": "accessory",
-  "singular": false,
+  "singular": true,
+  "headerDisplay": "Homebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels. Multiple Tivo devices can be controlled with this plugin.",
+  "footerDisplay": "(c) 2022 Brian A Lantz",
   "schema": {
       "type": "object",
       "properties": {
-          "name": {
-            "title": "Friendly Name",
-            "type": "string",
-            "default": "Channel Switch"
-          },
-          "ip": {
-            "title": "IP Address",
-            "type": "string",
-            "default": "127.0.0.1",
-            "required": true
-          },
-          "channel": {
-            "title": "Channel",
-            "type": "integer",
-            "default": 1,
-            "minimum": 1,
-            "required": true
-          },
-          "debug": {
-            "title": "Verbose debug logging?",
-            "type": "boolean",
+          "units": {
+			"title": "Tivo Devices",
+			"type": "array",
+			"description": "Individual Tivo DVRs",
+			"items": {
+				"type": "object",
+				"properties": {
+          			"name": {
+           			 	"title": "Tivo Name",
+            		 	"type": "string",
+            		 	"placeholder": "i.e. tivo-switch",
+            		 	"description": "Name for this Specific Tivo",
+            		 	"required": true
+          			},
+          			"ip": {
+            			"title": "IP Address",
+            			"type": "string",
+            			"format": "ipv4",
+            			"placeholder": "i.e. 127.0.0.1",
+            			"description": "IP Address for this Specific Tivo",
+            			"required": true
+          			},
+          			"port": {
+            			"title": "Port",
+            			"type": "integer",
+            			"description": "[Optional] Tivo API Port"
+          			},
+          			"channels": {
+						"title": "Channel Switches for this Tivo",
+						"type": "array",
+						"expandable": true,
+						"description": "[Optional] Individual Switches to Change to a Specific Channel on this Tivo",
+						"items": {
+							"type": "object",
+							"properties": {
+          						"name": {
+           			 				"title": "Switch Name",
+            		 				"type": "string",
+            		 				"placeholder": "tivo-ch-xxxx",
+            		 				"description": "Name for this Specific Channel Switch",
+            		 				"required": true
+            		 			},
+          						"channel": {
+            						"title": "Channel",
+            						"type": "integer",
+            						"description": "Channel on Tivo that this Switch Should Change to",
+           							"minimum": 1,
+            						"required": true
+            					}
+            				}
+          				}
+					}
+				}	
+		  	}
+		},
+		"debug": {
+        	"title": "Verbose debug logging?",
+           	"type": "boolean",
             "default": false
-          }
-       }
-    }
+        }
+	}
+  }
 }
