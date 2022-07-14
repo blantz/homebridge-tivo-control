@@ -134,6 +134,7 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-last.js
-newConfig.js
 register.sh
+last.js
+nerf
+newConfig.js
