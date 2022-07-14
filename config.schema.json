@@ -1,72 +1,122 @@
 {
   "pluginAlias": "TivoControl",
-  "pluginType": "accessory",
+  "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "Homebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels. Multiple Tivo devices can be controlled with this plugin.",
+  "headerDisplay": "# Tivo Controls for Homebridge\nHomebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels.\n\nMultiple Tivo devices can be controlled with this plugin.",
   "footerDisplay": "(c) 2022 Brian A Lantz",
   "schema": {
-      "type": "object",
-      "properties": {
-          "units": {
-			"title": "Tivo Devices",
-			"type": "array",
-			"description": "Individual Tivo DVRs",
-			"items": {
+	"type": "object",
+	"properties": {
+	  "devices": {
+		"title": "Tivo Devices",
+		"type": "array",
+		"description": "Individual Tivo DVRs",
+		"items": {
+		  "type": "object",
+		  "properties": {
+			"name": {
+			  "title": "Tivo Name",
+			  "type": "string",
+			  "placeholder": "i.e. tivo-switch",
+			  "description": "Name for this Specific Tivo",
+			  "required": true
+			},
+			"ip": {
+			  "title": "IP Address",
+			  "type": "string",
+			  "format": "ipv4",
+			  "placeholder": "i.e. 127.0.0.1",
+			  "description": "IP Address for this Specific Tivo",
+			  "required": true
+			},
+			"port": {
+			  "title": "Port",
+			  "type": "integer",
+			  "description": "[Optional] Tivo API Port"
+			},
+			"channels": {
+			  "title": "Channel Changing Switches",
+			  "type": "array",
+			  "expandable": true,
+			  "items": {
 				"type": "object",
 				"properties": {
-          			"name": {
-           			 	"title": "Tivo Name",
-            		 	"type": "string",
-            		 	"placeholder": "i.e. tivo-switch",
-            		 	"description": "Name for this Specific Tivo",
-            		 	"required": true
-          			},
-          			"ip": {
-            			"title": "IP Address",
-            			"type": "string",
-            			"format": "ipv4",
-            			"placeholder": "i.e. 127.0.0.1",
-            			"description": "IP Address for this Specific Tivo",
-            			"required": true
-          			},
-          			"port": {
-            			"title": "Port",
-            			"type": "integer",
-            			"description": "[Optional] Tivo API Port"
-          			},
-          			"channels": {
-						"title": "Channel Switches for this Tivo",
-						"type": "array",
-						"expandable": true,
-						"description": "[Optional] Individual Switches to Change to a Specific Channel on this Tivo",
-						"items": {
-							"type": "object",
-							"properties": {
-          						"name": {
-           			 				"title": "Switch Name",
-            		 				"type": "string",
-            		 				"placeholder": "tivo-ch-xxxx",
-            		 				"description": "Name for this Specific Channel Switch",
-            		 				"required": true
-            		 			},
-          						"channel": {
-            						"title": "Channel",
-            						"type": "integer",
-            						"description": "Channel on Tivo that this Switch Should Change to",
-           							"minimum": 1,
-            						"required": true
-            					}
-            				}
-          				}
-					}
-				}	
-		  	}
-		},
-		"debug": {
-        	"title": "Verbose debug logging?",
-           	"type": "boolean",
-            "default": false
-        }
+				  "name": {
+					"title": "Switch Name",
+					"type": "string",
+					"placeholder": "tivo-ch-xxxx",
+					"description": "Name for this Specific Channel Switch",
+					"required": true
+				  },
+				  "channel": {
+					"title": "Channel",
+					"type": "integer",
+					"description": "Channel on Tivo that this Switch Should Change to",
+					"minimum": 1,
+					"required": true
+				  }
+				}
+			  }
+			},
+			"custom": {
+			  "title": "Custom Defined Switches",
+			  "type": "array",
+			  "expandable": true,
+			  "description": "[Advanced] Define Switches to Execute One or More Commands on this Tivo. See https://www.tivocommunity.com/threads/tivo-ui-control-via-telnet-no-hacking-required.392385/",
+			  "items": {
+				"type": "object",
+				"properties": {
+				  "name": {
+					"title": "Switch Name",
+					"type": "string",
+					"placeholder": "tivo-custom-xxxx",
+					"description": "Name for this Specific Customized Switch",
+					"required": true
+				  },
+				  "commands": {
+					"title": "Custom IR Commands",
+					"type": "string",
+					"description": "Comma-Separated List of One or More Valid Tivo Commands for this Switch",
+					"placeholder": "IRCODE LIVETV, IRCODE PLAY",
+					"required": true
+				  }
+				}
+			  }
+			},
+			"play": {
+			  "type": "boolean",
+			  "title": "Define a switch for the 'Play' button",
+			  "default": false
+			},
+			"play-name": {
+			  "type": "string",
+			  "title": "Name for 'Play' switch",
+			  "default": "Play Tivo",
+			  "condition": {
+				"functionBody": "return model.devices[arrayIndices].play === true;"
+			  }
+			},
+			"pause": {
+			  "type": "boolean",
+			  "title": "Define a switch for the 'Pause' button",
+			  "default": false
+			},
+			"pause-name": {
+			  "type": "string",
+			  "title": "Name for 'Pause' switch",
+			  "default": "Pause Tivo",
+			  "condition": {
+				"functionBody": "return model.devices[arrayIndices].pause === true;"
+			  }
+			}
+		  }
+		}
+	  },
+	  "debug": {
+		"title": "Verbose debug logging?",
+		"type": "boolean",
+		"default": false
+	  }
 	}
   }
 }
