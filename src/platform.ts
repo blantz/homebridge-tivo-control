@@ -118,7 +118,7 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		}
 
 		if(unit['resume']) {
-			this.configure(unit['resume-name'], 'Sending resume command', [ 'IRCODE STANDBY, IRCODE STANDBY' ], unit.tivoConfig);
+			this.configure(unit['resume-name'], 'Sending resume command', [ 'IRCODE LIVETV' ], unit.tivoConfig);
 		}
 	}
 
@@ -145,11 +145,12 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	configure(theName, message, commands, tivoConfig) {
 		const uuid = this.api.hap.uuid.generate(theName);
 
+		this.logIt("Configuring: " + theName);
 		this.logIt("Using commands: " + JSON.stringify(commands));
 		const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 		let accessory = existingAccessory;
 		if (!existingAccessory) {
-			this.logIt('Configuring new accessory: ' + theName);
+			this.logIt('Adding new accessory: ' + theName);
 			accessory = new this.api.platformAccessory(theName, uuid);
 		}
 
