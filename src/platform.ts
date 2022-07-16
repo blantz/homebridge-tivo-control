@@ -13,6 +13,7 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
 
 	public readonly accessories: PlatformAccessory[] = [];
+	public readonly registeredAccessories: PlatformAccessory[] = [];
 
 	play = false;
 	pause = false;
@@ -64,6 +65,13 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		for (let index = 0; index < units.length; index++) {
 			this.configureEachUnit(units[index]);
 		}
+		for (let index = 0; index < this.accessories.length; index++) {
+			// @ts-ignore
+			if (!this.registeredAccessories.includes(this.accessories[index])) {
+				this.logIt('Removing accessory not found in config: ' + this.accessories[index].displayName);
+				this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.accessories[index]]);
+			}
+		}
 	}
 
 	logIt (message) {
@@ -73,7 +81,6 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	}
 
 	configureEachUnit(unit) {
-		// assume flat for the moment - array item 0
 		unit.tivoConfig = {
 			ip: unit['ip'],
 			port: unit['port'],
@@ -155,11 +162,9 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		// @ts-ignore
 		accessory.context.device = device;
 
-		service
-			.setCharacteristic(this.Characteristic.Name, theName);
+		service.setCharacteristic(this.Characteristic.Name, theName);
 
-		service
-			.getCharacteristic(this.Characteristic.On)
+		service.getCharacteristic(this.Characteristic.On)
 			.on('get', (callback) => {
 				this.logIt('Returning state = false');
 				callback(null, false);
@@ -184,6 +189,9 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 			// @ts-ignore
 			this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
 		}
+
+		// @ts-ignore
+		this.registeredAccessories.push(accessory);
 	}
 
 	setOn (accessory, value, callback) {
