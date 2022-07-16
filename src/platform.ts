@@ -54,22 +54,22 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		this.accessories.push(accessory);
 	}
 
-	/**
-	 * This is an example method showing how to register discovered accessories.
-	 * Accessories must only be registered once, previously created accessories
-	 * must not be registered again to prevent "duplicate UUID" errors.
-	 */
 	configureDevices() {
-		this.logIt('Configuring devices');
 		const units = this.config['devices'];
-		for (let index = 0; index < units.length; index++) {
-			this.configureEachUnit(units[index]);
+		if (units !== null) {
+			this.logIt('Configuring devices');
+			for (let index = 0; index < units.length; index++) {
+				this.configureEachUnit(units[index]);
+			}
 		}
-		for (let index = 0; index < this.accessories.length; index++) {
-			// @ts-ignore
-			if (!this.registeredAccessories.includes(this.accessories[index])) {
-				this.logIt('Removing accessory not found in config: ' + this.accessories[index].displayName);
-				this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.accessories[index]]);
+
+		if (this.accessories !== null) {
+			for (let index = 0; index < this.accessories.length; index++) {
+				// @ts-ignore
+				if (this.registeredAccessories === null || !this.registeredAccessories.includes(this.accessories[index])) {
+					this.logIt('Removing accessory not found in config: ' + this.accessories[index].displayName);
+					this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.accessories[index]]);
+				}
 			}
 		}
 	}

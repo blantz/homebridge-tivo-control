@@ -1,7 +1,7 @@
 {
   "name": "homebridge-tivo-control",
   "displayName": "Tivo Controls for Homebridge",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "private": false,
   "description": "Homebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels. Multiple Tivo devices can be controlled with this plugin.",
   "main": "dist/index.js",
