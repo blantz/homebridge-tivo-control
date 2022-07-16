@@ -17,7 +17,7 @@ available. See this web page:
 > https://www.tivocommunity.com/threads/tivo-ui-control-via-telnet-no-hacking-required.392385/
 
 The last type are switches predefined to common actions, such as pausing a recording,
-etc. Currently only two of these are defined, Play and Pause.
+etc. Currently only four of these are defined, Play, Pause, Standby and Resume.
 # Installation
 
 1. Install homebridge using: `npm install -g homebridge`
@@ -52,7 +52,11 @@ Configuration sample:
       "play": false,
       "play-name": "Play Tivo",
       "pause": false,
-      "pause-name": "Pause Tivo"
+      "pause-name": "Pause Tivo",
+      "standby": false,
+      "standby-name": "Tivo Standby",
+      "resume": false,
+      "resume-name": "Tivo Resume"
     }
   ]
 }
