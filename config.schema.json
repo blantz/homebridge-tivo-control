@@ -108,7 +108,34 @@
 			  "condition": {
 				"functionBody": "return model.devices[arrayIndices].pause === true;"
 			  }
+			},
+			"standby": {
+			  "type": "boolean",
+			  "title": "Define a switch to place the Tivo device on standby",
+			  "default": false
+			},
+			"standby-name": {
+			  "type": "string",
+			  "title": "Name for standby switch",
+			  "default": "Tivo Standby",
+			  "condition": {
+				"functionBody": "return model.devices[arrayIndices].standby === true;"
+			  }
+			},
+			"resume": {
+			  "type": "boolean",
+			  "title": "Define a switch to resume the Tivo device from standby",
+			  "default": false
+			},
+			"resume-name": {
+			  "type": "string",
+			  "title": "Name for resume switch",
+			  "default": "Tivo Resume",
+			  "condition": {
+				"functionBody": "return model.devices[arrayIndices].resume === true;"
+			  }
 			}
+
 		  }
 		}
 	  },

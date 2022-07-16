@@ -112,6 +112,14 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		if(unit['pause']) {
 			this.configure(unit['pause-name'], 'Sending Pause command', [ 'IRCODE PAUSE' ], unit.tivoConfig);
 		}
+
+		if(unit['standby']) {
+			this.configure(unit['standby-name'], 'Sending standby command', [ 'IRCODE STANDBY' ], unit.tivoConfig);
+		}
+
+		if(unit['resume']) {
+			this.configure(unit['resume-name'], 'Sending resume command', [ 'IRCODE STANDBY, IRCODE STANDBY' ], unit.tivoConfig);
+		}
 	}
 
 	configureEachChannel(thisChannel, tivoConfig) {
