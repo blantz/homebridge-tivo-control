@@ -58,19 +58,19 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		const units = this.config['devices'];
 		if (units !== null) {
 			this.logIt('Configuring devices');
-			for (let index = 0; index < units.length; index++) {
-				this.configureEachUnit(units[index]);
-			}
+			units.forEach(unit => this.configureEachUnit(unit));
 		}
 
 		if (this.accessories !== null) {
-			for (let index = 0; index < this.accessories.length; index++) {
+			this.logIt("Accessory count: " + this.accessories.length);
+			this.logIt("RegisteredAccessory count: " + this.registeredAccessories.length);
+			this.accessories.forEach(accessory => {
 				// @ts-ignore
-				if (this.registeredAccessories === null || !this.registeredAccessories.includes(this.accessories[index])) {
-					this.logIt('Removing accessory not found in config: ' + this.accessories[index].displayName);
-					this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.accessories[index]]);
+				if (this.registeredAccessories === null || !this.registeredAccessories.includes(accessory)) {
+					this.logIt('Removing accessory not found in config: ' + accessory.displayName);
+					this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
 				}
-			}
+			});
 		}
 	}
 
@@ -88,19 +88,14 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 
 		const channels = unit['channels'];
 		if (channels != undefined) {
-			for (let index = 0; index < channels.length; index++) {
-				this.configureEachChannel(channels[index], unit.tivoConfig);
-			}
+			channels.forEach(channel => this.configureEachChannel(channel, unit.tivoConfig));
 		}
 
 		this.handlePreDefined(unit);
 
 		const customs = unit['custom'];
 		if (customs != undefined) {
-			for (let index = 0; index < customs.length; index++) {
-				let custom = customs[index];
-				this.configure(custom.name, 'Sending custom command: ' + custom.name, custom.commands.split(','), unit.tivoConfig);
-			}
+			customs.forEach(custom => this.configure(custom.name, 'Sending custom command: ' + custom.name, custom.commands.split(','), unit.tivoConfig));
 		}
 	}
 
