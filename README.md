@@ -2,6 +2,7 @@
 
 A Homebridge plugin for defining switches to control a TiVo set top box.
 
+
 # Features
 This plugin allows you to define multiple Tivo devices, each with there own set
 of momentary contact switches (buttons) that will send remote control commands
@@ -30,35 +31,46 @@ Configuration sample:
 
 ```
 {
-  "platform": "TivoControl",
-  "debug": false,
-  "devices": [
+  "bridge": {
+    "name": "Homebridge",
+    "username": "....",
+    "port": 0,
+    "pin": "....."
+  },
+  "description": ".....",
+  "platforms": [
     {
-      "name": "Living Room TiVo",
-      "ip": "192.168.1.100",
-      "port": 31339,
-      "channels": [
+      "platform": "TivoControl",
+      "debug": false,
+      "devices": [
         {
-          "name": "tivo-NBC",
-          "channel": 1008
+          "name": "Living Room TiVo",
+          "ip": "192.168.1.100",
+          "port": 31339,
+          "channels": [
+            {
+              "name": "tivo-NBC",
+              "channel": 1008
+            }
+          ],
+          "custom": [
+            {
+              "name": "Live TV",
+              "commands": "IRCODE LIVETV"
+            }
+          ],
+          "play": false,
+          "play-name": "Play Tivo",
+          "pause": false,
+          "pause-name": "Pause Tivo",
+          "standby": false,
+          "standby-name": "Tivo Standby",
+          "resume": false,
+          "resume-name": "Tivo Resume"
         }
-      ],
-      "custom": [
-        {
-          "name": "Live TV",
-          "commands": "IRCODE LIVETV"
-        }
-      ],
-      "play": false,
-      "play-name": "Play Tivo",
-      "pause": false,
-      "pause-name": "Pause Tivo",
-      "standby": false,
-      "standby-name": "Tivo Standby",
-      "resume": false,
-      "resume-name": "Tivo Resume"
+      ]
     }
-  ]
+  ],
+  "accessories": []
 }
-
 ```
