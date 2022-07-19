@@ -5,6 +5,8 @@ All notable changes to homebridge-tivo-control will be documented in this file.
 ## 1.2.0 (2022-07-19)
 ### Changed
 - Homebridge Certified!!
+---
+## 1.1.9 (2022-07-19)
 ### Changed
 - More refactoring
 - Now requires node v14.19.3 or greater
