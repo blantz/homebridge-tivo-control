@@ -1,4 +1,5 @@
 # homebridge-tivo-control
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
 A Homebridge plugin for defining switches to control a TiVo set top box.
 
