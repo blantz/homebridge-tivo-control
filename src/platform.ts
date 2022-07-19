@@ -15,8 +15,6 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	public readonly accessories: PlatformAccessory[] = [];
 	public readonly registeredAccessories: PlatformAccessory[] = [];
 
-	play = false;
-	pause = false;
 	sendCommands;
 
 	constructor(
@@ -26,8 +24,6 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	) {
 		this.sendCommands = sendCommands.bind(this);
 		logger = log;
-
-		log.debug('Finished initializing platform:', config.name);
 
 		verbose = config['debug'];
 		logger.info('Verbose: ' + verbose);
@@ -55,23 +51,18 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	}
 
 	configureDevices() {
+		this.logIt('Configuring devices');
 		const units = this.config['devices'];
-		if (units !== null) {
-			this.logIt('Configuring devices');
-			units.forEach(unit => this.configureEachUnit(unit));
-		}
+		units?.forEach(unit => this.configureEachUnit(unit));
 
-		if (this.accessories !== null) {
-			this.logIt("Accessory count: " + this.accessories.length);
-			this.logIt("RegisteredAccessory count: " + this.registeredAccessories.length);
-			this.accessories.forEach(accessory => {
-				// @ts-ignore
-				if (this.registeredAccessories === null || !this.registeredAccessories.includes(accessory)) {
-					this.logIt('Removing accessory not found in config: ' + accessory.displayName);
-					this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-				}
-			});
-		}
+		// @ts-ignore
+		this.accessories?.forEach(accessory => {
+			// @ts-ignore
+			if (this.registeredAccessories === null || !this.registeredAccessories.includes(accessory)) {
+				this.logIt('Removing accessory not found in config: ' + accessory.displayName);
+				this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+			}
+		})
 	}
 
 	logIt (message) {
@@ -87,16 +78,12 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		};
 
 		const channels = unit['channels'];
-		if (channels != undefined) {
-			channels.forEach(channel => this.configureEachChannel(channel, unit.tivoConfig));
-		}
+		channels?.forEach(channel => this.configureEachChannel(channel, unit.tivoConfig));
 
 		this.handlePreDefined(unit);
 
 		const customs = unit['custom'];
-		if (customs != undefined) {
-			customs.forEach(custom => this.configure(custom.name, 'Sending custom command: ' + custom.name, custom.commands.split(','), unit.tivoConfig));
-		}
+		customs?.forEach(custom => this.configure(custom.name, 'Sending custom command: ' + custom.name, custom.commands.split(','), unit.tivoConfig));
 	}
 
 	handlePreDefined(unit) {
@@ -150,12 +137,14 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		}
 
 		// @ts-ignore
-		let service = accessory.getService(this.Service.Switch);
+		let service = accessory.getService(this.Service.Switch)
 		if (!service) {
 			// @ts-ignore
 			service = accessory.addService(this.Service.Switch);
 		}
-		let device = {
+
+		// @ts-ignore
+		accessory.context?.device = {
 			name: theName,
 			message: message,
 			commands: commands,
@@ -163,8 +152,6 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 			uuid: uuid,
 			service: service,
 		};
-		// @ts-ignore
-		accessory.context.device = device;
 
 		service.setCharacteristic(this.Characteristic.Name, theName);
 

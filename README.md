@@ -23,11 +23,11 @@ etc. Currently only four of these are defined, Play, Pause, Standby and Resume.
 
 1. Install homebridge using: `npm install -g homebridge`
 2. Install this plugin using: `npm install -g homebridge-tivo-control`
-3. Add one (or more) tivo switch accessories. See below for an example.
+3. Add one (or more) Tivo switch accessories. See below for examples.
 
-# Configuration
+# Sample Configuration
 
-Configuration sample:
+The following is a configuration example:
 
 ```
 {
