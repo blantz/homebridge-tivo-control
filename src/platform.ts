@@ -7,6 +7,12 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 
 let logger;
 let verbose = false;
+let predefinedMap : Map<string, string> = new Map([
+	['play', 'IRCODE PLAY'],
+	['pause', 'IRCODE PAUSE'],
+	['standby', 'IRCODE STANDBY'],
+	['resume', 'IRCODE LIVETV']
+]);
 
 export class TivoPlatform implements DynamicPlatformPlugin {
 	public readonly Service: typeof Service = this.api.hap.Service;
@@ -26,7 +32,7 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		logger = log;
 
 		verbose = config['debug'];
-		logger.info('Verbose: ' + verbose);
+		logger.info('Verbose debug logging: ' + verbose);
 
 
 		// When this event is fired it means Homebridge has restored all cached accessories from disk.
@@ -34,7 +40,7 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		// in order to ensure they weren't added to homebridge already. This event can also be used
 		// to start discovery of new accessories.
 		api.on('didFinishLaunching', () => {
-			this.logIt('Executed didFinishLaunching callback');
+			logIt('Executed didFinishLaunching callback');
 			this.configureDevices();
 		});
 	}
@@ -44,67 +50,49 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	 * It should be used to set up event handlers for characteristics and update respective values.
 	 */
 	configureAccessory(accessory: PlatformAccessory) {
-		this.logIt('Loading accessory from cache: ' + accessory.displayName);
+		logIt('Loading accessory from cache: ' + accessory.displayName);
 
 		// add the restored accessory to the accessories cache, so we can track if it has already been registered
 		this.accessories.push(accessory);
 	}
 
 	configureDevices() {
-		this.logIt('Configuring devices');
-		const units = this.config['devices'];
-		units?.forEach(unit => this.configureEachUnit(unit));
+		logIt('Configuring devices');
+		const devices = this.config['devices'];
+		devices?.forEach(device => this.configureEachDevice(device));
 
-		// @ts-ignore
 		this.accessories?.forEach(accessory => {
 			// @ts-ignore
 			if (this.registeredAccessories === null || !this.registeredAccessories.includes(accessory)) {
-				this.logIt('Removing accessory not found in config: ' + accessory.displayName);
+				logIt('Removing accessory not found in config: ' + accessory.displayName);
 				this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
 			}
 		})
 	}
 
-	logIt (message) {
-		if (verbose) {
-			logger.info(message);
-		}
-	}
-
-	configureEachUnit(unit) {
-		unit.tivoConfig = {
-			ip: unit['ip'],
-			port: unit['port'],
+	configureEachDevice(device) {
+		device.tivoConfig = {
+			ip: device['ip'],
+			port: device['port'],
 		};
 
-		const channels = unit['channels'];
-		channels?.forEach(channel => this.configureEachChannel(channel, unit.tivoConfig));
+		device['channels']?.forEach(channel => this.configureEachChannel(channel, device.tivoConfig));
 
-		this.handlePreDefined(unit);
-
-		const customs = unit['custom'];
-		customs?.forEach(custom => this.configure(custom.name, 'Sending custom command: ' + custom.name, custom.commands.split(','), unit.tivoConfig));
-	}
-
-	handlePreDefined(unit) {
-		if(unit['play']) {
-			this.configure(unit['play-name'], 'Sending Play command', [ 'IRCODE PLAY' ], unit.tivoConfig);
+		for (let [name, command] of predefinedMap) {
+			if(device[name]) {
+				this.configure(device[name + '-name'],
+					'Sending ' + name.charAt(0).toUpperCase() + name.slice(1) + ' command',
+					[ command ], device.tivoConfig);
+			}
 		}
 
-		if(unit['pause']) {
-			this.configure(unit['pause-name'], 'Sending Pause command', [ 'IRCODE PAUSE' ], unit.tivoConfig);
-		}
-
-		if(unit['standby']) {
-			this.configure(unit['standby-name'], 'Sending standby command', [ 'IRCODE STANDBY' ], unit.tivoConfig);
-		}
-
-		if(unit['resume']) {
-			this.configure(unit['resume-name'], 'Sending resume command', [ 'IRCODE LIVETV' ], unit.tivoConfig);
-		}
+		device['custom']?.forEach(custom => this.configure(custom.name,
+			'Sending custom command: ' + custom.name, custom.commands.split(','), device.tivoConfig));
 	}
 
 	configureEachChannel(thisChannel, tivoConfig) {
+		logIt('Configuring channel: ' + thisChannel['channel']);
+
 		thisChannel.name = '' + thisChannel['name'];
 		thisChannel.channel = '' + thisChannel['channel'];
 		thisChannel.message = 'Changing to channel: ' + thisChannel.channel;
@@ -113,8 +101,6 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	}
 
 	makeChannelCommands (thisChannel) {
-		this.logIt('Using channel: ' + thisChannel);
-
 		const myCommands = [];
 		for (const character of thisChannel) {
 			// @ts-ignore
@@ -127,12 +113,12 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	configure(theName, message, commands, tivoConfig) {
 		const uuid = this.api.hap.uuid.generate(theName);
 
-		this.logIt("Configuring: " + theName);
-		this.logIt("Using commands: " + JSON.stringify(commands));
+		logIt("Configuring: " + theName);
+		logIt("Using commands: " + JSON.stringify(commands));
 		const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 		let accessory = existingAccessory;
 		if (!existingAccessory) {
-			this.logIt('Adding new accessory: ' + theName);
+			logIt('Adding new accessory: ' + theName);
 			accessory = new this.api.platformAccessory(theName, uuid);
 		}
 
@@ -157,7 +143,7 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 
 		service.getCharacteristic(this.Characteristic.On)
 			.on('get', (callback) => {
-				this.logIt('Returning state = false');
+				logIt('Returning state = false');
 				callback(null, false);
 			})
 			.on('set', (value, callback) => {
@@ -190,21 +176,23 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 		if (value) {
 			logger.info(device.message);
 			const theseCommands = device.commands.slice();
-			this.logIt('Using commands: ' + JSON.stringify(theseCommands));
+			logIt('Using commands: ' + JSON.stringify(theseCommands));
 			this.sendCommands(device.tivoConfig, theseCommands, responses => {
-				this.logIt('Responses: ' + JSON.stringify(responses));
+				logIt('Responses: ' + JSON.stringify(responses));
 				callback();
-				this.logIt('Back from callback');
 				device.service.getCharacteristic(this.Characteristic.On).updateValue(false);
-				this.logIt('Should now be back off');
 			});
 		} else {
-			this.logIt('Skipping action for OFF');
+			logIt('Skipping action for OFF');
 			device.service.getCharacteristic(this.Characteristic.On).updateValue(false);
 		}
-		this.logIt('setOn exiting');
+		logIt('setOn exiting');
 	}
 }
 
-
+function logIt (message) {
+	if (verbose) {
+		logger.info(message);
+	}
+}
 
