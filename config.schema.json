@@ -5,8 +5,8 @@
   "headerDisplay": "# Tivo Controls for Homebridge\nHomebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels.\n\nMultiple Tivo devices can be controlled with this plugin.",
   "footerDisplay": "(c) 2022 Brian A Lantz",
   "funding": {
-	"type" : "paypal",
-	"url" : "https://paypal.me/BrianALantz"
+	"type": "paypal",
+	"url": "https://paypal.me/BrianALantz"
   },
   "schema": {
 	"type": "object",
@@ -66,7 +66,7 @@
 			  "title": "Custom Defined Switches",
 			  "type": "array",
 			  "expandable": true,
-			  "description": "[Advanced] Define Switches to Execute One or More Commands on this Tivo. See https://www.tivocommunity.com/threads/tivo-ui-control-via-telnet-no-hacking-required.392385/",
+			  "description": "[Advanced] Define Switches to Execute One or More Commands on this Tivo. For more details, see https://github.com/blantz/homebridge-tivo-control/blob/main/doc/README.md",
 			  "items": {
 				"type": "object",
 				"properties": {
@@ -87,59 +87,48 @@
 				}
 			  }
 			},
-			"play": {
-			  "type": "boolean",
-			  "title": "Define a switch for the 'Play' button",
-			  "default": false
-			},
-			"play-name": {
-			  "type": "string",
-			  "title": "Name for 'Play' switch",
-			  "default": "Play Tivo",
-			  "condition": {
-				"functionBody": "return model.devices[arrayIndices].play === true;"
-			  }
-			},
-			"pause": {
-			  "type": "boolean",
-			  "title": "Define a switch for the 'Pause' button",
-			  "default": false
-			},
-			"pause-name": {
-			  "type": "string",
-			  "title": "Name for 'Pause' switch",
-			  "default": "Pause Tivo",
-			  "condition": {
-				"functionBody": "return model.devices[arrayIndices].pause === true;"
-			  }
-			},
-			"standby": {
-			  "type": "boolean",
-			  "title": "Define a switch to place the Tivo device on standby",
-			  "default": false
-			},
-			"standby-name": {
-			  "type": "string",
-			  "title": "Name for standby switch",
-			  "default": "Tivo Standby",
-			  "condition": {
-				"functionBody": "return model.devices[arrayIndices].standby === true;"
-			  }
-			},
-			"resume": {
-			  "type": "boolean",
-			  "title": "Define a switch to resume the Tivo device from standby",
-			  "default": false
-			},
-			"resume-name": {
-			  "type": "string",
-			  "title": "Name for resume switch",
-			  "default": "Tivo Resume",
-			  "condition": {
-				"functionBody": "return model.devices[arrayIndices].resume === true;"
+			"predefined": {
+			  "type": "object",
+			  "title": "Predefined Switches",
+			  "properties": {
+				"play": {
+				  "type": "object",
+				  "properties": {
+					"enabled": {
+					  "title": "Define a switch for the 'Play' button",
+					  "type": "boolean",
+					  "default": false
+					},
+					"name": {
+					  "type": "string",
+					  "title": "Name for 'Play' switch",
+					  "default": "Play Tivo",
+					  "condition": {
+						"functionBody": "return model.devices[arrayIndices].predefined.play.enabled === true;"
+					  }
+					}
+				  }
+				},
+				"pause": {
+				  "type": "object",
+				  "properties": {
+					"enabled": {
+					  "title": "Define a switch for the 'Pause' button",
+					  "type": "boolean",
+					  "default": false
+					},
+					"name": {
+					  "type": "string",
+					  "title": "Name for 'Pause' switch",
+					  "default": "Pause Tivo",
+					  "condition": {
+						"functionBody": "return model.devices[arrayIndices].predefined.pause.enabled === true;"
+					  }
+					}
+				  }
+				}
 			  }
 			}
-
 		  }
 		}
 	  },

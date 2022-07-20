@@ -1,7 +1,7 @@
 import { sendCommands } from 'node-tivo';
 
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig } from 'homebridge';
-import { Service, Characteristic, CharacteristicValue } from 'homebridge';
+import { Service, Characteristic } from 'homebridge';
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 
@@ -9,9 +9,7 @@ let logger;
 let verbose = false;
 let predefinedMap : Map<string, string> = new Map([
 	['play', 'IRCODE PLAY'],
-	['pause', 'IRCODE PAUSE'],
-	['standby', 'IRCODE STANDBY'],
-	['resume', 'IRCODE LIVETV']
+	['pause', 'IRCODE PAUSE']
 ]);
 
 export class TivoPlatform implements DynamicPlatformPlugin {
@@ -78,9 +76,13 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 
 		device['channels']?.forEach(channel => this.configureEachChannel(channel, device.tivoConfig));
 
+		const predefined = device['predefined'];
+
+
 		for (let [name, command] of predefinedMap) {
-			if(device[name]) {
-				this.configure(device[name + '-name'],
+			const item = predefined[name];
+			if(item.enabled) {
+				this.configure(item.name,
 					'Sending ' + name.charAt(0).toUpperCase() + name.slice(1) + ' command',
 					[ command ], device.tivoConfig);
 			}
@@ -101,12 +103,12 @@ export class TivoPlatform implements DynamicPlatformPlugin {
 	}
 
 	makeChannelCommands (thisChannel) {
-		const myCommands = [];
+		const myCommands: String[] = [];
 		for (const character of thisChannel) {
 			// @ts-ignore
 			myCommands.push('IRCODE NUM' + character);
 		}
-
+		myCommands.push('IRCODE ENTER');
 		return myCommands;
 	}
 

@@ -2,7 +2,10 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
 A Homebridge plugin for defining switches to control a TiVo set top box.
-
+> NOTE: Tivo has a Remote Control feature that needs to be enabled in the
+> Settings, in order for this plugin to be able to communicate with the Tivo.
+>
+> Look for it in the Remote Control page and enable it.
 
 # Features
 This plugin allows you to define multiple Tivo devices, each with there own set
@@ -19,11 +22,7 @@ available. See more
 [information here](doc/README.md). 
 
 The last type are switches predefined to common actions, such as pausing a recording,
-etc. Currently only four of these are defined, Play, Pause, Standby and Resume.
-> NOTE: Tivo has a Remote Control feature that needs to be enabled in the
-> Settings, in order for this plugin to be able to communicate with the Tivo.
-> 
-> Look for it in the Remote Control page and enable it.
+etc. Currently only four of these are defined, Play, and Pause.
 # Installation
 
 1. Install homebridge using: `npm install -g homebridge`
@@ -64,14 +63,16 @@ The following is a configuration example:
               "commands": "IRCODE LIVETV"
             }
           ],
-          "play": false,
-          "play-name": "Play Tivo",
-          "pause": false,
-          "pause-name": "Pause Tivo",
-          "standby": false,
-          "standby-name": "Tivo Standby",
-          "resume": false,
-          "resume-name": "Tivo Resume"
+          "predefined": {
+            "play": {
+                "enabled": true,
+                "name": "Play Tivo"
+            },
+            "pause": {
+                "enabled": false,
+                "name": "Pause Tivo"
+            }
+          }
         }
       ]
     }

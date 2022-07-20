@@ -2,6 +2,13 @@
 
 All notable changes to homebridge-tivo-control will be documented in this file.
 
+## 1.2.2 (2022-07-20)
+### Changed
+- Added documentation for the Tivo TCP Network Remote Control Protocol
+- Added better support documentation on what can be defined for custom switch commands
+- Added list of known IRCODEs
+- Changed logic of predefined switches, grouping them together.
+---
 ## 1.2.1 (2022-07-19)
 ### Changed
 - Added 'Donate' support to the Homebridge UI
