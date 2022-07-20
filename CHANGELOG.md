@@ -2,6 +2,10 @@
 
 All notable changes to homebridge-tivo-control will be documented in this file.
 
+## 1.2.1 (2022-07-19)
+### Changed
+- Added 'Donate' support to the Homebridge UI
+---
 ## 1.2.0 (2022-07-19)
 ### Changed
 - Homebridge Certified!!
