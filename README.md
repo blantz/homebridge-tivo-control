@@ -15,11 +15,15 @@ You supply a name for the switch, and the channel number.
 
 The second style allow you to send any supported
 IR codes to Tivo. There are many defined IR codes
-available. See this web page: 
-> https://www.tivocommunity.com/threads/tivo-ui-control-via-telnet-no-hacking-required.392385/
+available. See more
+[information here](doc/README.md). 
 
 The last type are switches predefined to common actions, such as pausing a recording,
 etc. Currently only four of these are defined, Play, Pause, Standby and Resume.
+> NOTE: Tivo has a Remote Control feature that needs to be enabled in the
+> Settings, in order for this plugin to be able to communicate with the Tivo.
+> 
+> Look for it in the Remote Control page and enable it.
 # Installation
 
 1. Install homebridge using: `npm install -g homebridge`
