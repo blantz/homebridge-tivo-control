@@ -7,6 +7,9 @@ A Homebridge plugin for defining switches to control a TiVo set top box.
 >
 > Look for it in the Remote Control page and enable it.
 
+# Dependencies
+This plugin now requires node v14.20.0 or greater. See [How To Update Node.js](https://homebridge.io/w/JTKEF)
+
 # Features
 This plugin allows you to define multiple Tivo devices, each with there own set
 of momentary contact switches (buttons) that will send remote control commands

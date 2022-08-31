@@ -4,10 +4,6 @@
   "singular": true,
   "headerDisplay": "# Tivo Controls for Homebridge\nHomebridge plugin for TiVo set top boxes, to provide momentary contact switches that simulate sending Tivo remote keypresses, and change channels.\n\nMultiple Tivo devices can be controlled with this plugin.",
   "footerDisplay": "(c) 2022 Brian A Lantz",
-  "funding": {
-	"type": "paypal",
-	"url": "https://paypal.me/BrianALantz"
-  },
   "schema": {
 	"type": "object",
 	"properties": {
